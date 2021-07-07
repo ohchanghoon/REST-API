@@ -1,6 +1,25 @@
 const express = require('express');
 const server = express();
+const mongoose = require('mongoose');
+require('dotenv').config({ path: 'variable.env' });
 const PORT = 3005;
+
+mongoose.connect(
+  process.env.MONGODB_URL,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  },
+  (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('Connected to database successfully');
+    }
+  }
+);
 
 server.use(express.json());
 
@@ -37,6 +56,7 @@ server.post('/api/user', (req, res) => {
   res.json(users);
 });
 
+// findIndex 만족하는 요소가 없으면 -1 반환
 server.put('/api/user/:id', (req, res) => {
   let foundIndex = users.findIndex((u) => {
     return u.id === req.params.id;
