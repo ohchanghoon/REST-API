@@ -37,6 +37,30 @@ server.post('/api/user', (req, res) => {
   res.json(users);
 });
 
+server.put('/api/user/:id', (req, res) => {
+  let foundIndex = users.findIndex((u) => {
+    return u.id === req.params.id;
+  });
+  if (foundIndex === -1) {
+    res.status(404).json({ errorMessage: 'User was not found' });
+  } else {
+    users[foundIndex] = { ...users[foundIndex], ...req.body };
+    res.json(users[foundIndex]);
+  }
+});
+
+server.delete('/api/user/:id', (req, res) => {
+  let foundIndex = users.findIndex((u) => {
+    return u.id === req.params.id;
+  });
+  if (foundIndex === -1) {
+    res.status(404).json({ errorMessage: 'User was not found' });
+  } else {
+    let foundUser = users.splice(foundIndex, 1);
+    res.json(foundUser[0]);
+  }
+});
+
 server.listen(PORT, () => {
   console.log('The server is running');
 });
